@@ -1,5 +1,5 @@
 # Push stats from hiveos to prometheus
-Originally forked from [tomcsi/hiveos-prometheus](https://github.com/tomcsi/hiveos-prometheus), but has been almost entirely re-written to provide additional functionalities.
+Originally forked from [esille/hiveos-prometheus](https://github.com/esille/hiveos-prometheus), but has been almost entirely re-written to provide additional functionalities.
 
 ## Supports:
 * Multiple miners
@@ -11,8 +11,8 @@ Originally forked from [tomcsi/hiveos-prometheus](https://github.com/tomcsi/hive
 
 ## Installation
 ```bash
-sudo git clone https://github.com/heaje/hiveos-prometheus.git
-cd hiveos-prometheus
+sudo git clone https://github.com/heaje/hiveos-exporter.git
+cd hiveos-exporter
 sudo apt install python3-prometheus-client
 sudo make install
 sudo systemctl enable hiveos-exporter
