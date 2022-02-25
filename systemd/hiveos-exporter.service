@@ -1,0 +1,15 @@
+[Unit]
+Description=Hiveos-exporter
+After=network-online.target multi-user.target
+Requires=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+TimeoutStartSec=infinity
+ExecStart=/usr/bin/python3  /opt/hiveos-prometheus/bin/hiveos-exporter.py
+Restart=always
+RestartSec=45
+
+[Install]
+WantedBy=multi-user.target

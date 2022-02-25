@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  hivestat:
+    build: .
+    image: ghcr.io/jonootto/hiveos-prometheus:main
+    container_name: hivestat
+    restart: unless-stopped
+    environment:
+      TZ: $TZ
+      RIG_NAME: $RIG_NAME
+    security_opt:
+      - seccomp:unconfined
+    volumes:
+      - /run/hive/:/run/hive/:ro
+    ports:
+      - 7890:7890/tcp
