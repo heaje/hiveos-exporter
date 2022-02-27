@@ -1,0 +1,15 @@
+# Suprnova requires two parameters per instance:
+# coin: pools are always something like <coin>.suprnova.cc.
+# api_key: Your API key can be found under "My Account" -> "Edit Account"
+# suprnova:
+#   - coin: rtm
+#     api_key: xxxxxxxxxxxxyyyyyyyyyyyyyzzzzzzzzzzzzz
+
+# Hiveon requires two parameters per instance:
+# coin: Either "ETH" or "ETC"
+# wallet: The public ETH or ETC wallet key to which you are mining
+# hiveon:
+#   - coin: ETH
+#     wallet: xxxxxxxxxxxxxyyyyyyyyyyyyzzzzzzzzzzz
+#   - coin: ETC
+#     wallet: zzzzzzzzzzzzzyyyyyyyyyyyyxxxxxxxxxxx

@@ -1,1 +1,3 @@
 prometheus-client
+requests-cache
+pyyaml

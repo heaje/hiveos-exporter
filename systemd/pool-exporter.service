@@ -7,7 +7,8 @@ StartLimitIntervalSec=0
 [Service]
 Type=simple
 TimeoutStartSec=infinity
-ExecStart=/usr/bin/python3  /opt/hiveos-exporter/bin/hiveos-exporter.py
+ExecStart=/usr/bin/python3  /opt/hiveos-exporter/bin/pool-exporter.py
+WorkingDirectory=/opt/hiveos-exporter/bin
 Restart=always
 RestartSec=45
 
