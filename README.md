@@ -1,26 +1,58 @@
-# Push stats from hiveos to prometheus
-Originally forked from [esille/hiveos-prometheus](https://github.com/esille/hiveos-prometheus), but has been almost entirely re-written to provide additional functionalities.
+# Mining Exporters
+Prometheus exporters for Cryptocurrency mining.
+* HiveOS
+* Mining Pools
+    * Hiveon
+    * suprnova.cc
 
-## Supports:
+## HiveOS Supported Functionality:
+Exporter listens on port 10101 by default.
+
 * Multiple miners
-* Multiple coins
-* Nvidia & AMD stats
+* Multiple coins (across different miners)
+* Nvidia & AMD stats (Temps / Fan Speeds / etc.)
 
-## Known Limitations:
-* Does not currently support multi-algorithm mining configurations (e.g. ETH + ZIL, ETH + TON, etc.)
+**Known Limitations:**
+* Does not currently support multi-algorithm mining configurations within a single miner (e.g. ETH + ZIL, ETH + TON, etc.)
+
+## Pool Supported Functionality:
+Exporter listens on port 10102 by default.
+
+* Total pool hashrate
+* Per worker hashrate
+* Pool rewards
+* Pool payouts
+* Pool share counts (Accepted / Rejected)
+
+### Pool Exporter Configuration
+Examples of configuration for the supported Pool Exporters can be found in [etc/pools.yml](etc/pools.yml).  The pool exporter will not do anything useful until it has been configured.
 
 ## Installation
+Installation puts all files under /opt/hiveos-exporter.
+
 ```bash
 sudo git clone https://github.com/heaje/hiveos-exporter.git
 cd hiveos-exporter
-sudo apt install python3-prometheus-client
+sudo apt install python3-prometheus-client python3-requests-cache
 sudo make install
+
+# For HiveOS Exporter
 sudo systemctl enable hiveos-exporter
 sudo systemctl start hiveos-exporter
+
+# For Pool Exporter.  Configuration REQUIRED.
+sudo systemctl enable pool-exporter
+sudo systemctl start pool-exporter
 ```
 
 ## Uninstall
 ```
-sudo apt remove python3-prometheus-client
+sudo apt remove python3-prometheus-client python3-requests-cache
 sudo make uninstall
 ```
+
+## Acknowledgements
+The HiveOS exporter was originally forked from [esille/hiveos-prometheus](https://github.com/esille/hiveos-prometheus), but has been almost entirely re-written to provide additional functionalities.
+
+## Compatibility between versions
+These exporters are very much a work in progress at the moment.  I do not expect that there will be changes to metric names or labels at this point, but please do be aware that they could change.  I'm making no promises on that right now.
