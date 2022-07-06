@@ -68,7 +68,7 @@ class Miner:
 def read_gpu_details() -> Tuple[List[Gpu], dict]:
     gpu_by_index = []
     gpu_by_bus_num = {}
-    log.debug('Reading GPU details from {}'.format(HIVEOS_GPU_DETECT_FILE))
+    log.debug('Reading GPU details from %s', HIVEOS_GPU_DETECT_FILE)
     with open(HIVEOS_GPU_DETECT_FILE, 'r') as gpu_detect:
         for index, cur_gpu in enumerate(json.load(gpu_detect)):
             gpu_obj = Gpu(index, cur_gpu)
@@ -78,9 +78,8 @@ def read_gpu_details() -> Tuple[List[Gpu], dict]:
     return gpu_by_index, gpu_by_bus_num
 
 
-
 def read_stats_file() -> dict:
-    log.debug('Reading statistics from {}'.format(HIVEOS_STATS_FILE))
+    log.debug('Reading statistics from %s', HIVEOS_STATS_FILE)
     with open(HIVEOS_STATS_FILE, 'r') as stats:
         return json.load(stats)
 
@@ -111,13 +110,13 @@ def read_cpu_temp() -> List:
 
 
 def read_gpu_stats() -> dict:
-    log.debug('Reading GPU statistics from {}'.format(GPU_STATS_FILE))
+    log.debug('Reading GPU statistics from %s', GPU_STATS_FILE)
     with open(GPU_STATS_FILE, 'r') as gpu_stats:
         return json.load(gpu_stats)
 
 
 def read_hiveos_config(path: str) -> dict:
-    log.debug('Reading HiveOS configuration from {}'.format(path))
+    log.debug('Reading HiveOS configuration from %s', path)
     config = {}
     valid_line = re.compile('^\s*([a-zA-Z0-9_]+)="*([^"\n]+)"*\S *$')
     with open(path, 'r') as hive_config:
@@ -158,7 +157,7 @@ def main():
     init_logging(opts.log_level)
     config = read_hiveos_config(HIVEOS_CONFIG)
     rig = config['WORKER_NAME']
-    log.info('Starting HTTP server on port {}'.format(opts.port))
+    log.info('Starting HTTP server on port %s', opts.port)
     start_http_server(opts.port)
     while True:
         gpu_by_index, gpu_by_bus_num = read_gpu_details()
@@ -171,7 +170,7 @@ def main():
                 METRICS['ratio'].labels(rig=rig, type='invalid', coin=cur_miner.coin,
                                         miner=cur_miner.name, miner_version=cur_miner.stats['ver']).set(cur_miner.stats['ar'][2])
             else:
-                log.debug('Miner "{}" does not support tracking invalid shares'.format(cur_miner.name))
+                log.debug('Miner %s does not support tracking invalid shares', cur_miner.name)
 
             METRICS['total_hash'].labels(rig=rig, coin=cur_miner.coin, miner=cur_miner.name,
                                          miner_version=cur_miner.stats['ver']).set(cur_miner.total_hs)
@@ -193,15 +192,18 @@ def main():
             METRICS['gpu_power'].labels(**labels).set(gpu_stats['power'][index])
             METRICS['gpu_fan'].labels(**labels).set(gpu_stats['fan'][index])
             METRICS['gpu_load'].labels(**labels).set(gpu_stats['load'][index])
-            if cur_gpu.is_amd():
+
+            # Not all cards support tracking memory/junction temps.
+            if 'mtemp' in gpu_stats and int(gpu_stats['mtemp'][index]) > 0:
                 METRICS['gpu_memtemp'].labels(**labels).set(gpu_stats['mtemp'][index])
+            if 'jtemp' in gpu_stats and int(gpu_stats['jtemp'][index]) > 0:
                 METRICS['gpu_jtemp'].labels(**labels).set(gpu_stats['jtemp'][index])
 
         for index, cur_temp in enumerate(read_cpu_temp()):
             METRICS['cpu_temp'].labels(rig=rig, cpu=index).set(cur_temp)
 
         next_check = datetime.datetime.now() + datetime.timedelta(seconds=opts.refresh)
-        log.info('Next metric refresh at {}'.format(next_check.strftime('%Y-%d-%m %H:%M:%S')))
+        log.info('Next metric refresh at %s', next_check.strftime('%Y-%d-%m %H:%M:%S'))
         sleep(opts.refresh)
 
 
