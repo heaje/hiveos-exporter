@@ -56,3 +56,12 @@ The HiveOS exporter was originally forked from [esille/hiveos-prometheus](https:
 
 ## Compatibility between versions
 These exporters are very much a work in progress at the moment.  I do not expect that there will be changes to metric names or labels at this point, but please do be aware that they could change.  I'm making no promises on that right now.
+
+## Donations
+If you found these scripts helpful and would like to donate to the author, you can do so at the following addresses.  This does not provide any guarantee of future support.
+
+ETH: 0xDcd7c971Fe679569CAeaB8A91f7a1f291B527F21
+
+BTC: 1BPvBqaMjqWVHrmeMQTrZqADZr5n4ML5GA
+
+RVN: RPq85qKtLg8dgrsGPicQrBpLVgR4YU4txg
