@@ -14,6 +14,8 @@ Exporter listens on port 10101 by default.
 
 **Known Limitations:**
 * Does not currently support multi-algorithm mining configurations within a single miner (e.g. ETH + ZIL, ETH + TON, etc.)
+* Only minimal support exists for FPGA devices.  The author does not have one of these devices to fully explore how to properly detect them.
+  * The only thing detected for FPGA devices is hashrate for a given algorithm
 
 ## Pool Supported Functionality:
 Exporter listens on port 10102 by default.

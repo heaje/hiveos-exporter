@@ -176,10 +176,17 @@ def main():
                                          miner_version=cur_miner.stats['ver']).set(cur_miner.total_hs)
             if cur_miner.is_gpu_miner():
                 for index, bus_number in enumerate(cur_miner.stats['bus_numbers']):
-                    cur_gpu = gpu_by_bus_num[bus_number]
-                    METRICS['gpu_hash'].labels(rig=rig, card=cur_gpu.card_index, model=cur_gpu.model,
-                                               brand=cur_gpu.brand, vendor=cur_gpu.vendor, coin=cur_miner.coin,
-                                               miner=cur_miner.name, miner_version=cur_miner.stats['ver']).set(cur_miner.stats['hs'][index])
+                    try:
+                        cur_gpu = gpu_by_bus_num[bus_number]
+                        METRICS['gpu_hash'].labels(rig=rig, card=cur_gpu.card_index, model=cur_gpu.model,
+                                                   brand=cur_gpu.brand, vendor=cur_gpu.vendor, coin=cur_miner.coin,
+                                                   miner=cur_miner.name, miner_version=cur_miner.stats['ver']).set(cur_miner.stats['hs'][index])
+                    except KeyError:
+                        log.warning('Device detected with invalid bus number.  Assuming this is a non-GPU device')
+                        METRICS['gpu_hash'].labels(rig=rig, card=index, model='unknown',
+                                                   brand='unknown', vendor='unknown', coin=cur_miner.coin,
+                                                   miner=cur_miner.name, miner_version=cur_miner.stats['ver']).set(cur_miner.stats['hs'][index])
+
             elif cur_miner.is_cpu_miner():
                 for index, hs in enumerate(cur_miner.stats['hs']):
                     METRICS['cpu_hash'].labels(rig=rig, core=index, coin=cur_miner.coin,
