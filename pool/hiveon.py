@@ -1,6 +1,5 @@
 import datetime
 from .pool import Pool
-from prometheus_client.core import GaugeMetricFamily, CounterMetricFamily
 
 
 class hiveon(Pool):

@@ -145,10 +145,12 @@ def init_logging(level):
 
 
 def get_opts():
-    parser = argparse.ArgumentParser(description='HiveOS Prometheus exporter', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser = argparse.ArgumentParser(description='HiveOS Prometheus exporter',
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-l', '--log_level', dest='log_level', help='The logging level', default='info')
     parser.add_argument('-r', '--refresh', dest='refresh', help='How often to refresh metrics', default=60, type=int)
-    parser.add_argument('-p', '--port', dest='port', help='The listening port for the exporter', default=10101, type=int)
+    parser.add_argument('-p', '--port', dest='port', help='The listening port for the exporter', default=10101,
+                        type=int)
     return parser.parse_args()
 
 
@@ -162,13 +164,13 @@ def main():
     while True:
         gpu_by_index, gpu_by_bus_num = read_gpu_details()
         for cur_miner in read_miner_stats():
-            METRICS['ratio'].labels(rig=rig, type='accepted', coin=cur_miner.coin,
-                                    miner=cur_miner.name, miner_version=cur_miner.stats['ver']).set(cur_miner.stats['ar'][0])
-            METRICS['ratio'].labels(rig=rig, type='rejected', coin=cur_miner.coin,
-                                    miner=cur_miner.name, miner_version=cur_miner.stats['ver']).set(cur_miner.stats['ar'][1])
+            METRICS['ratio'].labels(rig=rig, type='accepted', coin=cur_miner.coin, miner=cur_miner.name,
+                                    miner_version=cur_miner.stats['ver']).set(cur_miner.stats['ar'][0])
+            METRICS['ratio'].labels(rig=rig, type='rejected', coin=cur_miner.coin, miner=cur_miner.name,
+                                    miner_version=cur_miner.stats['ver']).set(cur_miner.stats['ar'][1])
             if len(cur_miner.stats['ar']) >= 3:
-                METRICS['ratio'].labels(rig=rig, type='invalid', coin=cur_miner.coin,
-                                        miner=cur_miner.name, miner_version=cur_miner.stats['ver']).set(cur_miner.stats['ar'][2])
+                METRICS['ratio'].labels(rig=rig, type='invalid', coin=cur_miner.coin, miner=cur_miner.name,
+                                        miner_version=cur_miner.stats['ver']).set(cur_miner.stats['ar'][2])
             else:
                 log.debug('Miner %s does not support tracking invalid shares', cur_miner.name)
 
@@ -194,7 +196,8 @@ def main():
 
         gpu_stats = read_gpu_stats()
         for index, cur_gpu in enumerate(gpu_by_index):
-            labels = dict(rig=rig, card=cur_gpu.card_index, model=cur_gpu.model, brand=cur_gpu.brand, vendor=cur_gpu.vendor)
+            labels = dict(rig=rig, card=cur_gpu.card_index, model=cur_gpu.model, brand=cur_gpu.brand,
+                          vendor=cur_gpu.vendor)
             METRICS['gpu_coretemp'].labels(**labels).set(gpu_stats['temp'][index])
             METRICS['gpu_power'].labels(**labels).set(gpu_stats['power'][index])
             METRICS['gpu_fan'].labels(**labels).set(gpu_stats['fan'][index])
